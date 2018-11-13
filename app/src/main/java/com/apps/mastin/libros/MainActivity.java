@@ -28,10 +28,13 @@ public class MainActivity extends AppCompatActivity {
         booksList = (ListView) findViewById(R.id.booksList);
         fabAdd = (FloatingActionButton) findViewById(R.id.fab_add);
 
+        //Datos de prueba
         BookDto book = new BookDto("948474636","Cien años de soledad","20 de agosto del 2012",2);
         bookDtoArrayList.add(book);
         bookDtoArrayList.add(book);
         bookDtoArrayList.add(book);
+        //
+
 
         adapter = new BookAdapter(MainActivity.this,bookDtoArrayList);
         booksList.setAdapter(adapter);

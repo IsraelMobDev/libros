@@ -26,6 +26,7 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
 
     AuthorAdapter adapter;
     ArrayList<AuthorDto> authorDtoArrayList;
+    ArrayList<AuthorDto> selectedItems;
     ListView authorsList;
     ImageButton getDate;
     EditText dateText;
@@ -46,14 +47,18 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         authorDtoArrayList = new ArrayList<>();
+        selectedItems = new ArrayList<AuthorDto>();
         authorsList = (ListView) findViewById(R.id.authorsList);
         getDate = (ImageButton) findViewById(R.id.getDateBtn);
         dateText = (EditText) findViewById(R.id.dateText);
 
         ///Datos de prueba
         AuthorDto authorDto = new AuthorDto(6353524,"Marco Bolton");
+        AuthorDto authorDto1 = new AuthorDto(6353524,"Marco");
+        AuthorDto authorDto2 = new AuthorDto(6353524,"Marco");
         authorDtoArrayList.add(authorDto);
-        authorDtoArrayList.add(authorDto);
+        authorDtoArrayList.add(authorDto1);
+        authorDtoArrayList.add(authorDto2);
         ///
 
         getDate.setOnClickListener(this);
@@ -64,7 +69,11 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
         authorsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                AuthorDto selectedItem = authorDtoArrayList.get(i);//((AuthorDto) view).getAuthorId();
+                if(selectedItems.contains(selectedItem))
+                    selectedItems.remove(selectedItem); //remove deselected item from the list of selected items
+                else
+                    selectedItems.add(selectedItem); //add selected item to the list of selected items
             }
         });
 
@@ -88,10 +97,8 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.save_btn) {
-
-
-
-
+            String selectedAuthors = String.valueOf(selectedItems.size());
+            Toast.makeText(getApplicationContext(),selectedAuthors,Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
