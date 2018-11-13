@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/bookTitleEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="@string/title"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/dateText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.85"
+            android:layout_margin="5dp"
+            android:singleLine="true"
+            />
+        <ImageButton
+            android:id="@+id/getDateBtn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.15"
+            android:layout_margin="5dp"
+            android:background="@color/colorAccent"
+            android:src="@drawable/baseline_calendar_today_white_18"
+            />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/authorsList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

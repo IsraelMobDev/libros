@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Libros</string>
+    <string name="hint_search">Que libro buscas?</string>
+    <string name="name">Nombre</string>
+    <string name="date">Fecha</string>
+    <string name="authorsNumber">Numero de autores</string>
+    <string name="title">Titulo</string>
+    <string name="author">Autores: </string>
+    <string name="edition">Edicion: </string>
+    <string name="formato_fecha">dd/mm/yyyy</string>
+    <string name="save">Guardar</string>
+    <string name="order_by">Ordenar por:</string>
 </resources>
