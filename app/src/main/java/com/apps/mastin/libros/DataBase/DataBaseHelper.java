@@ -193,7 +193,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    public int updateNote(BookDto bookDto) {
+    public int updateBook(BookDto bookDto) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -206,12 +206,52 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(bookDto.getBookId())});
     }
 
-    public void deleteNote(BookDto bookDto) {
+    public void deleteBook(BookDto bookDto) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(BookDto.TABLE_NAME, BookDto.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(bookDto.getBookId())});
         db.close();
     }
+
+    //PARA LA TABLA DE AUTORES
+
+    public long insertAuthor(String authorName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(AuthorDto.COLUMN_AUTHOR_NAME, authorName);
+
+        long id = db.insert(AuthorDto.TABLE_NAME, null, values);
+
+        db.close();
+
+        return id;
+    }
+
+    public ArrayList<AuthorDto> getAllAuthors() {
+        ArrayList<AuthorDto> authors = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + AuthorDto.TABLE_NAME + " ORDER BY " +
+                AuthorDto.COLUMN_AUTHOR_NAME + " ASC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                AuthorDto authorDto = new AuthorDto(cursor.getInt(cursor.getColumnIndex(BookDto.COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndex(AuthorDto.COLUMN_AUTHOR_NAME))
+                );
+
+                authors.add(authorDto);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        return authors;
+    }
+
 
 
 }

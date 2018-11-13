@@ -1,6 +1,7 @@
 package com.apps.mastin.libros;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,10 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
     final int year = c.get(Calendar.YEAR);
 
     private DataBaseHelper dataBaseHelper;
+    Intent editData;
+    Bundle extras;
+    int editBookId;
+    BookDto editBookDto;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,24 +52,28 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_new_edit_book);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        dataBaseHelper = new DataBaseHelper(getApplicationContext());
         authorDtoArrayList = new ArrayList<>();
         selectedItems = new ArrayList<AuthorDto>();
         authorsList = (ListView) findViewById(R.id.authorsList);
         getDate = (ImageButton) findViewById(R.id.getDateBtn);
         dateText = (EditText) findViewById(R.id.dateText);
         bookTitle = (EditText) findViewById(R.id.bookTitleEditText);
-        dataBaseHelper = new DataBaseHelper(getApplicationContext());
+
+        editData = getIntent();
+        extras = editData.getExtras();
+        if(extras != null){
+            if(extras.containsKey("BookID")){
+                editBookId = extras.getInt("BookID");
+                editBookDto = dataBaseHelper.getBook(editBookId);
+                dateText.setText(editBookDto.getBookDate());
+                bookTitle.setText(editBookDto.getBookTitle());
+            }
+        }
 
 
-        ///Datos de prueba
-        AuthorDto authorDto = new AuthorDto(6353524,"Marco Bolton");
-        AuthorDto authorDto1 = new AuthorDto(6353524,"Marco");
-        AuthorDto authorDto2 = new AuthorDto(6353524,"Marco");
-        authorDtoArrayList.add(authorDto);
-        authorDtoArrayList.add(authorDto1);
-        authorDtoArrayList.add(authorDto2);
-        ///
+
+        authorDtoArrayList.addAll(dataBaseHelper.getAllAuthors());
 
         getDate.setOnClickListener(this);
         adapter = new AuthorAdapter(AddEditBookActivity.this,authorDtoArrayList);
@@ -94,7 +103,13 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.done_button, menu);
+
+        if(editBookDto != null){
+            getMenuInflater().inflate(R.menu.edit_menu, menu);
+        }else{
+            getMenuInflater().inflate(R.menu.done_button, menu);
+        }
+
         return true;
     }
 
@@ -103,10 +118,22 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
         int id = item.getItemId();
         if (id == R.id.save_btn) {
             String selectedAuthors = String.valueOf(selectedItems.size());
-            long bookId = dataBaseHelper.insertBook(bookTitle.getText().toString(), dateText.getText().toString(), selectedAuthors);
+            if(editBookDto != null){
+                editBookDto.setBookAuthorsNumber(selectedItems.size());
+                editBookDto.setBookDate(dateText.getText().toString());
+                editBookDto.setBookTitle(bookTitle.getText().toString());
+                long bookId = dataBaseHelper.updateBook(editBookDto);
+            }else{
+                long bookId = dataBaseHelper.insertBook(bookTitle.getText().toString(), dateText.getText().toString(), selectedAuthors);
+            }
+
             Toast.makeText(getApplicationContext(),"Guardado Correctamente",Toast.LENGTH_SHORT).show();
             onBackPressed();
             return true;
+        }else if(id == R.id.remove_btn){
+            dataBaseHelper.deleteBook(editBookDto);
+            Toast.makeText(getApplicationContext(),"Se elimino Correctamente",Toast.LENGTH_SHORT).show();
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
