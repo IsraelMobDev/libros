@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,11 +12,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apps.mastin.libros.Adapters.AuthorAdapter;
-import com.apps.mastin.libros.Model.AuthorDto;
+import com.apps.mastin.libros.DataBase.DataBaseHelper;
+import com.apps.mastin.libros.DataBase.Model.AuthorDto;
+import com.apps.mastin.libros.DataBase.Model.BookDto;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,7 +29,7 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
     ArrayList<AuthorDto> selectedItems;
     ListView authorsList;
     ImageButton getDate;
-    EditText dateText;
+    EditText bookTitle, dateText;
 
     //Para el DatePicker
     private static final String ZERO = "0";
@@ -38,6 +38,8 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
     final int month = c.get(Calendar.MONTH);
     final int day = c.get(Calendar.DAY_OF_MONTH);
     final int year = c.get(Calendar.YEAR);
+
+    private DataBaseHelper dataBaseHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
         authorsList = (ListView) findViewById(R.id.authorsList);
         getDate = (ImageButton) findViewById(R.id.getDateBtn);
         dateText = (EditText) findViewById(R.id.dateText);
+        bookTitle = (EditText) findViewById(R.id.bookTitleEditText);
+        dataBaseHelper = new DataBaseHelper(getApplicationContext());
+
 
         ///Datos de prueba
         AuthorDto authorDto = new AuthorDto(6353524,"Marco Bolton");
@@ -98,7 +103,9 @@ public class AddEditBookActivity extends AppCompatActivity implements View.OnCli
         int id = item.getItemId();
         if (id == R.id.save_btn) {
             String selectedAuthors = String.valueOf(selectedItems.size());
-            Toast.makeText(getApplicationContext(),selectedAuthors,Toast.LENGTH_SHORT).show();
+            long bookId = dataBaseHelper.insertBook(bookTitle.getText().toString(), dateText.getText().toString(), selectedAuthors);
+            Toast.makeText(getApplicationContext(),"Guardado Correctamente",Toast.LENGTH_SHORT).show();
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);

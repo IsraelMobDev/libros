@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.apps.mastin.libros.Model.BookDto;
+import com.apps.mastin.libros.DataBase.Model.BookDto;
 import com.apps.mastin.libros.R;
 
 import java.util.ArrayList;

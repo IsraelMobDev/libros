@@ -6,9 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
-import android.widget.TextView;
 
-import com.apps.mastin.libros.Model.AuthorDto;
+import com.apps.mastin.libros.DataBase.Model.AuthorDto;
 import com.apps.mastin.libros.R;
 
 import java.util.ArrayList;
